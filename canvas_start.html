@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Drawing Area</title>
+	<!-- You can add your style here rather than in an external style sheet. -->
+	<style>
+		canvas {
+			border: 5px solid #d3d3d3;
+			background-color: #f1f1f1;
+			display: block;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- DO NOT MODIFY THIS HTML -->
+	<canvas id="myCanvas" width="350" height="500"></canvas>
+	<input type="color" id="picker" />
+</body>
+
+<script>
+	var canvas = document.querySelector("#myCanvas") // select the canvas
+	var ctx = canvas.getContext("2d"); // create drawing object
+	canvas.height = window.innerHeight * 0.8; // canvas is 80% of the window
+	canvas.width = window.innerWidth * 0.8;
+	var color ="black" // default color to black
+	var pick_color = document.querySelector('#picker'); // get input color from picker
+	var draw_color = true;  // initialize boolean to start drawing
+
+
+	function draw(posX, posY) { //draw function taking in canvas pos
+		console.log("Draw function start") // log draw()
+		if (draw_color) { // if draw_color (pen down) is true
+			console.log(posX, posY); // record current position
+			ctx.fillStyle = color; // set the drawing color
+			ctx.arc(posX, posY, 10, 0, 2 * Math.PI); // create circle with 10 radius
+			ctx.fill() // fill the current path
+			ctx.beginPath(); // start drawing 
+		}
+	}
+
+	myCanvas.addEventListener('mousemove',function(e){ // listen to mouse movement on canvas
+		console.log( e.x , e.y);
+		draw (e.x, e.y); // log x and y position for draw function
+	}
+	)
+	
+	window.addEventListener('keydown', function(e){ // listen to keyboard  event 
+		console.log(e); // log key
+		if (e.keyCode == 38){ // if up is pressed, stop drawing and update draw function
+			draw_color = false;
+			console.log("pen up")
+		} else if (e.keyCode == 40){ // if down is pressed, start drawing and update draw function
+			draw_color = true;
+			console.log( "pen down")
+		} else if (e.keyCode == 82){ // if "r" is pressed
+			color = "red"
+			console.log('red')
+		} else if (e.keyCode == 66) { // if b is pressed
+			color = "blue"
+			console.log('blue')
+		} else if (e.keyCode == 89){ // if y is pressed 
+			color = 'yellow'
+			console.log('yellow')
+		} else if (e.keyCode == 71){ // if g is pressed 
+			color = "green" 
+			console.log('green')
+		} 
+
+		if (e.keyCode == 32) { // if space is pressed, clear REctangle
+			ctx.clearRect(0,0,ctx.canvas.width, ctx.canvas.height);
+			console.log('clear rectangle');
+		}
+	}
+	)
+
+	window.addEventListener ("change", function(e){ // listen to color picker
+		color = pick_color.value; // if color picker changed, color changes
+		ctx.fillStyle = color; // change fill color 
+		console.log('color picker used')
+	}
+	)
+
+
+</script>
+
+</html>
